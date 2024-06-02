@@ -10,16 +10,20 @@
 
 ## TODO
 1. Add timezones relevant to country-city (using pycountry, countryinfo, etc.).
-2. Is it correct to use 'select_item' at first?
+
 
 ## Questions
-3. Is it okay to calculate user all items?
-4. Is it okay to calculate user items through days?
-5. What if events have the same timestamp?
+1. Is it correct to use 'select_item' at first?
+2. Is it okay to calculate user all items?
+3. Is it okay to calculate user items through days?
+4. What if events have the same timestamp?
 6. What if item name has many item IDs?
 7. Why are all item IDs missing in the purchase stage when joining?
 
 ## References
-- [Closed Funnel in BigQuery Using GA4 Data](https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/): Session is not unique, so it would be better to review this query, and there is no consecutive order between events.
+- [Closed Funnel in BigQuery Using GA4 Data](https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/): 
+* Session is not unique, so it would be better to review this query
+* there is no consecutive order between events.
+
 - [Closed Funnel Description](https://www.optimizesmart.com/open-and-closed-funnels-in-ga4-with-examples/)
 - [Open Funnel vs. Closed Funnel in Google Analytics 4](https://www.analyticsmania.com/post/open-funnel-vs-closed-funnel-in-google-analytics-4/)
