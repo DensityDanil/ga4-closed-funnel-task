@@ -26,6 +26,9 @@
 5. What if events have the same timestamp?
 6. What if item name has many item IDs?
 7. Why are all item IDs missing in the purchase stage when joining?
+8. when `item_name` have many `item_id` and vise versa https://docs.google.com/spreadsheets/d/18kc-EcTmbUiWqSF3DgG7VpVQvVEawqYk7COvIiQb-Qs/edit#gid=0?
+9. add cleanup for products like `Android Iconic 4" Decal` and `Android Iconic 4&quot; Decal`
+10. why when add join statement with `item_id` then me cannot see any purchase funnel stage in `funnel_by_items_pivot`?
 
 ## Articles
 1. [Closed Funnel in BigQuery Using GA4 Data](https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/): 
