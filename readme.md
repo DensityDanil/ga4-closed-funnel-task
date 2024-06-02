@@ -1,3 +1,6 @@
+# main query  
+`sql1 - closed funnel query.sql` - https://github.com/DensityDanil/ga4-closed-funnel-task/blob/main/sql1%20-%20closed%20funnel%20query.sql
+
 # How Funnel Works
 1. The funnel works for only those events: 'select_item', 'view_item', 'add_to_cart', 'purchase'.
 2. All events are filtered to be consecutive in time for users.
