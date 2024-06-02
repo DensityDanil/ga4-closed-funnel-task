@@ -20,8 +20,7 @@ SELECT
 
 ,view_item AS (
 SELECT 
-      device.category AS category
-     ,event_name
+       event_name
      ,(SELECT value.int_value FROM UNNEST(event_params) WHERE event_name = 'view_item' AND key = 'ga_session_id') AS step1_id,
   FROM
     ga4_data
@@ -52,7 +51,7 @@ SELECT
 ,funnel_conditions AS (
 SELECT      t0.*,t1.*,t2.*,t3.*
 FROM        select_item     t0
-LEFT JOIN   view_item       t1 ON step2_id = step0_id
+LEFT JOIN   view_item       t1 ON step1_id = step0_id
 LEFT JOIN   add_to_cart     t2 ON step2_id = step0_id
 LEFT JOIN   purchase        t3 ON step3_id = step0_id
 
@@ -61,8 +60,9 @@ LEFT JOIN   purchase        t3 ON step3_id = step0_id
 ,funnel AS (
 SELECT
   category,
+  COUNT(DISTINCT step0_id) AS select_item_events,
   COUNT(DISTINCT step1_id) AS view_item_events,
-  COUNT(DISTINCT step2_id) AS begin_checkout_events,
+  COUNT(DISTINCT step2_id) AS add_to_cart_events,
   COUNT(DISTINCT step3_id) AS purchase_events
 FROM funnel_conditions
 GROUP BY 1)
