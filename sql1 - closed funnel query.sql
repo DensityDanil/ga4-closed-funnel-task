@@ -143,7 +143,31 @@ LEFT JOIN user_event_timestamp_and_items AS t4
 ) 
  
 -- when two different events have same timestamp? 
+,consecutive_funnel_processing AS (
+SELECT *
+FROM (
+        SELECT
+                 subq1.*
+                ,ROW_NUMBER() OVER( PARTITION BY user_pseudo_id 
+                                                ,item_name -- hard moment: is it ok to left other user items?
+                                                ,event_timestamp_date 
+                                    ORDER BY user_item_funnel_sum DESC ) AS max_user_item_day_funnel_sum
+                -- what if duplicates?
+                ,COUNT(1) OVER(PARTITION BY user_pseudo_id,event_timestamp) user_select_item_freq -- optional 
  
+        FROM 
+                (SELECT 
+                         t.*
+                        ,IF(event_timestamp                     IS NOT NULL,    1,      0)
+                                +IF(view_item_event_timestamp   IS NOT NULL,    1,      0)
+                                +IF(add_to_cart_event_timestamp IS NOT NULL,    1,      0)
+                                +IF(purchase_event_timestamp    IS NOT NULL,    1,      0) AS user_item_funnel_sum -- this help avoid count of `selet_item,view_item` AND `selet_item,view_item,add_to_cart` for one user i one day; 
+                FROM consecutive_funnel t 
+                ) AS subq1
+     ) AS subq2
+WHERE max_user_item_day_funnel_sum=1
+)
+
 -- one user may have many items 
 SELECT  
          item_name 
