@@ -70,3 +70,6 @@ GROUP BY 1)
 SELECT *
 FROM funnel
 ;
+
+-- category	select_item_events	view_item_events	add_to_cart_events	purchase_events
+-- desktop	3	3	1	2
