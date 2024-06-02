@@ -41,7 +41,7 @@ GROUP BY 1
         ,5
 ) 
 
-,one_user_date_timestamp_many_events AS (
+,one_user_item_timestamp_many_events AS (
 -- rows=324,073
 SELECT   
          user_pseudo_id
@@ -78,7 +78,7 @@ FROM (
                   WHERE  (user_pseudo_id,item_name,event_timestamp)
                                                 NOT IN (
                                                         SELECT (user_pseudo_id,item_name,event_timestamp)
-                                                        FROM one_user_date_timestamp_many_events
+                                                        FROM one_user_item_timestamp_many_events
                                                 )
                   -- WHERE user_pseudo_id='84534898.7989426950' and item_name='Google Black Cork Journal'
                   ) AS subq
