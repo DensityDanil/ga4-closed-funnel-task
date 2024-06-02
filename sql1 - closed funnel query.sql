@@ -30,7 +30,6 @@ SELECT
          t1.user_pseudo_id 
         ,t1.event_timestamp 
         ,t1.event_name 
-        ,t2.item_id 
         ,t2.item_name 
         -- revenue? 
 FROM prepare_sample t1 
@@ -39,7 +38,6 @@ GROUP BY 1
         ,2 
         ,3 
         ,4 
-        ,5 
 ) 
  
 ,user_event_timestamp_and_items AS ( 
