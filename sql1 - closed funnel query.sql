@@ -12,7 +12,9 @@ SELECT
  
 FROM `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_2020*` 
 WHERE  _table_suffix  
-    between '0101' and '1231' 
+--  todo: timezone normalization?
+    -- between '0101' and '1031'  --> There is no data to display.
+    BETWEEN '1101' and '1231'
     AND event_name in ( 
                        'select_item' 
                      , 'view_item' 
