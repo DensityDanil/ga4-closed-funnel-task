@@ -24,8 +24,6 @@ WHERE  _table_suffix
  
  
  
-
-
 ,unnested_items AS ( 
 SELECT   
          t1.user_pseudo_id 
@@ -42,7 +40,18 @@ GROUP BY 1
         ,4
         ,5
 ) 
- 
+
+,one_user_date_timestamp_many_events AS (
+-- rows=324,073
+SELECT   
+         user_pseudo_id
+        ,item_name
+        ,event_timestamp
+FROM unnested_items
+GROUP BY 1,2,3
+HAVING COUNT(DISTINCT event_name)>1
+)
+
  
 ,user_event_timestamp_and_items AS ( 
 -- join user events with items important after row_number() above 
