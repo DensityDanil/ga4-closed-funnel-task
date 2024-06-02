@@ -169,12 +169,17 @@ WHERE max_user_item_day_funnel_sum=1
 )
 
 -- one user may have many items 
+,funnel_by_items_pivot AS(
 SELECT  
          item_name 
         ,COUNT(DISTINCT CONCAT(user_pseudo_id,event_timestamp))             AS select_item 
         ,COUNT(DISTINCT CONCAT(user_pseudo_id,view_item_event_timestamp))   AS view_item 
         ,COUNT(DISTINCT CONCAT(user_pseudo_id,add_to_cart_event_timestamp)) AS add_to_cart 
         ,COUNT(DISTINCT CONCAT(user_pseudo_id,purchase_event_timestamp))    AS purchase 
-FROM consecutive_funnel 
+FROM consecutive_funnel_processing 
 GROUP BY 1 
-ORDER BY purchase DESC
+ORDER BY purchase DESC,select_item DESC,view_item DESC,add_to_cart DESC
+)
+
+SELECT *
+FROM funnel_by_items_pivot
