@@ -1,5 +1,9 @@
 -- author: Qasim Ali Khan
 -- https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/
+-- Today, I'm sharing my experience of creating GA4 like funnels 
+-- in Google BigQuery. 
+-- The idea is to make closed, session based, funnel to understand the
+-- user behavior and reduce the friction in the funnel. So, let's dive in.
 
 SELECT
   category,
