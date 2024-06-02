@@ -27,7 +27,7 @@ with tcase2 AS (
 , tcase_with_many_same_events AS (
 
   select 1 user_pseudo_id,  'select_item'   event_name,     1 event_timestamp,  1 as item_name union all
-  select 1 user_pseudo_id,  'view_item'     event_name,     2 event_timestamp,  1 as item_name union all -- focus
+  select 1 user_pseudo_id,  'view_item'     event_name,     2 event_timestamp,  1 as item_name union all -- focus, view_item repeated twice at one timestamp
   select 1 user_pseudo_id,  'view_item'     event_name,     3 event_timestamp,  1 as item_name union all -- focus
 
   select 1 user_pseudo_id,  'select_item'   event_name,     3 event_timestamp,  2 as item_name union all
@@ -60,6 +60,7 @@ with tcase2 AS (
 
 ,processing_seq_id AS (
 SELECT subq1.*
+--
       ,SUM( IF( event_name != prev_event_name ,1,0) ) OVER( PARTITION BY user_pseudo_id,item_name ORDER BY event_timestamp,event_name_order_id ) seq_id
 FROM (
       SELECT subq.*
