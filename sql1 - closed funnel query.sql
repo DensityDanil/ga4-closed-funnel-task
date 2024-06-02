@@ -24,19 +24,7 @@ WHERE  _table_suffix
  
  
  
-,user_event_timestamp AS ( 
--- here row number help to enumerate sequence based on needed event_name list and respective timestamps 
-SELECT   subq.* 
-        ,ROW_NUMBER() OVER( PARTITION BY user_pseudo_id ORDER BY event_timestamp ) user_pseudo_id_rn -- ties cases i ignore here temporary 
-         
-FROM  
-    (SELECT  user_pseudo_id 
-            ,event_timestamp 
-            ,event_name 
-    FROM prepare_sample 
-    GROUP BY 1,2,3) subq 
-) 
- 
+
 ,unnested_items AS ( 
 SELECT   
          t1.user_pseudo_id 
