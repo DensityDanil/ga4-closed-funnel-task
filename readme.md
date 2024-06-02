@@ -24,10 +24,9 @@
 6. What if item name has many item IDs?
 7. Why are all item IDs missing in the purchase stage when joining?
 
-## References
-- [Closed Funnel in BigQuery Using GA4 Data](https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/): 
-* Session is not unique, so it would be better to review this query
+## Articles
+1. [Closed Funnel in BigQuery Using GA4 Data](https://www.linkedin.com/pulse/creating-ga4-funnels-big-query-qasim-ali-khan/): 
+* Session is not unique, and may appear for many different `user_pseudo_id`, so it would be better to review this query
 * there is no consecutive order between events.
-
-- [Closed Funnel Description](https://www.optimizesmart.com/open-and-closed-funnels-in-ga4-with-examples/)
-- [Open Funnel vs. Closed Funnel in Google Analytics 4](https://www.analyticsmania.com/post/open-funnel-vs-closed-funnel-in-google-analytics-4/)
+2. [Closed Funnel Description](https://www.optimizesmart.com/open-and-closed-funnels-in-ga4-with-examples/)
+3. [Open Funnel vs. Closed Funnel in Google Analytics 4](https://www.analyticsmania.com/post/open-funnel-vs-closed-funnel-in-google-analytics-4/)
