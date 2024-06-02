@@ -27,7 +27,7 @@ with tcase2 AS (
 , tcase_with_many_same_events AS (
 
   select 1 user_pseudo_id,  'select_item'   event_name,     1 event_timestamp,  1 as item_name union all
-  select 1 user_pseudo_id,  'view_item'     event_name,     2 event_timestamp,  1 as item_name union all -- focus, view_item repeated twice at one timestamp
+  select 1 user_pseudo_id,  'view_item'     event_name,     2 event_timestamp,  1 as item_name union all -- focus, view_item repeated twice at 2,3 timestamp
   select 1 user_pseudo_id,  'view_item'     event_name,     3 event_timestamp,  1 as item_name union all -- focus
 
   select 1 user_pseudo_id,  'select_item'   event_name,     3 event_timestamp,  2 as item_name union all
@@ -73,7 +73,7 @@ FROM (
                   WHEN event_name = 'add_to_cart'   THEN 3
                   WHEN event_name = 'purchase'      THEN 4 -- custom sorting https://stackoverflow.com/questions/31978082/does-big-query-support-custom-sorting
             END as event_name_order_id
-      FROM tcase_with_many_same_events_shuffled t) AS subq
+      FROM tcase_with_many_same_events t) AS subq
       ) AS subq1
   ORDER BY user_pseudo_id,item_name,event_timestamp -- does this change ranking? - no  
 )
