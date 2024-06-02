@@ -25,11 +25,13 @@ WHERE  _table_suffix
  
  
 
+
 ,unnested_items AS ( 
 SELECT   
          t1.user_pseudo_id 
         ,t1.event_timestamp 
-        ,t1.event_name 
+        ,t1.event_name
+        ,DATE(t1.event_timestamp) AS event_timestamp_date
         ,t2.item_name 
         -- revenue? 
 FROM prepare_sample t1 
@@ -37,8 +39,10 @@ LEFT JOIN UNNEST(items) t2
 GROUP BY 1 
         ,2 
         ,3 
-        ,4 
+        ,4
+        ,5
 ) 
+ 
  
 ,user_event_timestamp_and_items AS ( 
 -- join user events with items important after row_number() above 
