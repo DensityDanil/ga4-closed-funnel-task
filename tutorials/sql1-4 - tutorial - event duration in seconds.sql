@@ -22,11 +22,11 @@ FROM
          subq1.*
         ,DATE_DIFF(  event_timestamp_next 
                    , event_timestamp
-                   , SECOND) AS event_seconds_duration
+                   , SECOND) AS event_seconds_duration -- experimental calc
 FROM 
     (SELECT 
          t.*
-        ,LEAD(event_timestamp) OVER( PARTITION BY user_pseudo_id,event_timestamp_date ORDER BY event_timestamp ) event_timestamp_next -- how to calc last row?
+        ,LEAD(event_timestamp) OVER( PARTITION BY user_pseudo_id,event_timestamp_date ORDER BY event_timestamp ) event_timestamp_next -- how to calc last row? simplify to min,max
     FROM prepare_sample t
     WHERE user_day_event_rn=1
     ) AS subq1
@@ -64,5 +64,6 @@ WHERE event_name in (
 )
 
 
-SELECT *
-FROM filtered_event_stats
+SELECT user_day_event_rn
+FROM prepare_sample
+GROUP BY 1
