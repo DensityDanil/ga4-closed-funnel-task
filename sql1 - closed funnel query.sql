@@ -88,23 +88,21 @@ ORDER BY user_pseudo_id,item_name,event_timestamp
 ) 
  
 
-,user_event_timestamp_and_items AS ( 
--- join user events with items important after row_number() above 
-SELECT    
-         t1.* 
-        ,t2.item_name 
-         
-FROM user_event_timestamp t1 
-LEFT JOIN unnested_items t2 
-    USING(user_pseudo_id 
-         ,event_timestamp 
-         ,event_name) 
-GROUP BY 1 
-        ,2 
-        ,3 
-        ,4 
-        ,5 
-) 
+,user_event_timestamp_and_items  AS (
+SELECT *
+FROM 
+        (SELECT   t.*
+                 ,ROW_NUMBER() OVER( PARTITION BY  user_pseudo_id
+                                                  ,event_timestamp_date
+                                                  ,item_name
+                                                  ,event_name
+                                                  ,user_pseudo_id_rn
+                                     ORDER BY event_timestamp ) user_item_decrease_duplicated_consecutive_events -- this help decrease duplicated events like `select_item,select_item,view_item,view_item...` -> `select_item,view_item...`
+                -- one user many purchases after select->view->add->purchase example: https://docs.google.com/spreadsheets/d/1R9e9_j5ZgYKEKmw5izQuYmhoZ0XCEGKkg0qEsporwCE/edit#gid=1034448389&range=B1
+        FROM user_item_day_ranking t) subq
+WHERE user_item_decrease_duplicated_consecutive_events=1
+ORDER BY user_pseudo_id,item_name,event_timestamp_date,user_pseudo_id_rn
+)
  
  
 --  what about sequence of `select_item->select_item->view_item->add_to_cart->add_to_cart->purchase`??? 
