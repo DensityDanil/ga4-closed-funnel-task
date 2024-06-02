@@ -106,38 +106,40 @@ ORDER BY user_pseudo_id,item_name,event_timestamp_date,user_pseudo_id_rn
  
  
 --  what about sequence of `select_item->select_item->view_item->add_to_cart->add_to_cart->purchase`??? 
-,consecutive_funnel AS  
-(SELECT   
+,consecutive_funnel AS  (
+SELECT   
          t1.* 
         ,t2.event_timestamp AS view_item_event_timestamp 
         ,t3.event_timestamp AS add_to_cart_event_timestamp 
         ,t4.event_timestamp AS purchase_event_timestamp 
-        ,COUNT(1) OVER(PARTITION BY t1.user_pseudo_id) user_freq -- optional 
- 
+
 -- take a look at `(t(N+1).user_pseudo_id_rn - t(N).user_pseudo_id_rn)=1` in join 
 FROM (SELECT  *  
       FROM  user_event_timestamp_and_items  
-      WHERE  event_name = 'select_item') t1 
+      WHERE  event_name = 'select_item') AS t1 -- V there problem cause for 1 event we can join two next rows
  
-LEFT JOIN user_event_timestamp_and_items t2 
+LEFT JOIN user_event_timestamp_and_items AS t2 
     ON  t1.user_pseudo_id = t2.user_pseudo_id 
     AND t2.event_name = 'view_item' 
-    AND t2.item_name = t1.item_name 
+    AND t2.item_name = t1.item_name
+    AND t2.event_timestamp_date = t1.event_timestamp_date
     AND (t2.user_pseudo_id_rn - t1.user_pseudo_id_rn)=1 
  
-LEFT JOIN user_event_timestamp_and_items t3 
+LEFT JOIN user_event_timestamp_and_items AS t3 
     ON  t1.user_pseudo_id = t3.user_pseudo_id 
     AND t3.event_name = 'add_to_cart' 
     AND t3.item_name = t2.item_name 
+    AND t3.event_timestamp_date = t2.event_timestamp_date
     AND (t3.user_pseudo_id_rn - t2.user_pseudo_id_rn)=1 
  
-LEFT JOIN user_event_timestamp_and_items t4 
+LEFT JOIN user_event_timestamp_and_items AS t4 
     ON  t1.user_pseudo_id = t4.user_pseudo_id 
     AND t4.event_name = 'purchase' 
     AND t4.item_name = t3.item_name 
+    AND t4.event_timestamp_date = t3.event_timestamp_date
     AND (t4.user_pseudo_id_rn - t3.user_pseudo_id_rn)=1 
  
-ORDER BY user_freq DESC 
+
 ) 
  
 -- when two different events have same timestamp? 
