@@ -60,7 +60,7 @@ with tcase2 AS (
 
 ,processing_seq_id AS (
 SELECT subq1.*
---
+      -- i skip date
       ,SUM( IF( event_name != prev_event_name ,1,0) ) OVER( PARTITION BY user_pseudo_id,item_name ORDER BY event_timestamp,event_name_order_id ) seq_id
 FROM (
       SELECT subq.*
