@@ -183,3 +183,66 @@ ORDER BY purchase DESC,select_item DESC,view_item DESC,add_to_cart DESC
 
 SELECT *
 FROM funnel_by_items_pivot
+
+
+-- ,user_item_properties AS
+-- (SELECT   item_name
+--         ,user_pseudo_id
+--         ,COUNT(DISTINCT event_timestamp)                AS select_item
+--         ,COUNT(DISTINCT view_item_event_timestamp)      AS view_item
+--         ,COUNT(DISTINCT add_to_cart_event_timestamp)    AS add_to_cart
+--         ,COUNT(DISTINCT purchase_event_timestamp)       AS purchase 
+-- FROM consecutive_funnel_processing
+-- GROUP BY 1,2)
+
+-- ,properties_pivot AS 
+-- (SELECT 
+--          select_item 
+--         ,view_item 
+--         ,add_to_cart 
+--         ,purchase
+--         ,COUNT(DISTINCT CONCAT(item_name,user_pseudo_id))
+-- FROM user_item_properties
+-- GROUP BY 1,2,3,4)
+
+
+-- ,user_lookup AS 
+-- (SELECT *
+-- FROM consecutive_funnel_processing
+-- WHERE user_pseudo_id IN (
+--                                         SELECT user_pseudo_id
+--                                         FROM   consecutive_funnel_processing
+--                                         GROUP BY 1
+--                                         HAVING  COUNT(DISTINCT event_timestamp_date)=1 
+--                                                 AND COUNT(DISTINCT add_to_cart_event_timestamp)>1
+--                                         -- ORDER BY purchase_event_timestamp
+--                                         LIMIT 1
+--                         )
+--         AND add_to_cart_event_timestamp IS NOT NULL
+-- )
+
+-- ,user_day_item AS (
+-- SELECT   user_pseudo_id
+--         ,event_timestamp_date
+--         ,item_name
+--         ,COUNT(DISTINCT event_timestamp) event_timestamp_dcnt
+--         ,STRING_AGG(event_name ORDER BY event_timestamp ASC) event_seq
+-- FROM user_event_timestamp_and_items
+-- GROUP BY 1,2,3)
+
+
+-- ,analyse_view_item_select_item AS
+-- (SELECT   event_seq
+--         ,COUNT(DISTINCT event_timestamp_dcnt)
+--         ,CASE
+--                 WHEN STRPOS(event_seq, 'view_item')<STRPOS(event_seq, 'select_item') THEN 'view first'
+--                 WHEN STRPOS(event_seq, 'view_item')>STRPOS(event_seq, 'select_item') THEN 'select first'
+--         END AS which_event_first
+-- FROM user_day_item
+-- WHERE 
+--         (  event_seq LIKE '%view_item,select_item%' 
+--         OR event_seq LIKE '%select_item,view_item%'
+--         )
+-- GROUP BY event_seq
+-- ORDER BY 2 DESC,which_event_first DESC
+-- )
