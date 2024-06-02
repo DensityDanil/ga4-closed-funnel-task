@@ -52,7 +52,42 @@ GROUP BY 1,2,3
 HAVING COUNT(DISTINCT event_name)>1
 )
 
+,user_item_day_ranking AS ( 
+SELECT subq2.*
+      ,SUM( IF( event_name != prev_event_name ,1,0) ) OVER( PARTITION BY user_pseudo_id                         -- this help match sequence like `select_item,select_item,view_item,view_item...` as 1,1,2,2...
+                                                                        ,item_name
+                                                                        ,event_timestamp_date 
+
+                                                            ORDER BY     event_timestamp
+                                                                        ,event_name_order_id ) user_pseudo_id_rn 
+FROM (
+        SELECT subq.*
+              ,LAG(event_name) OVER( PARTITION BY user_pseudo_id
+                                                 ,item_name
+                                                 ,event_timestamp_date 
+                                     ORDER BY event_timestamp,event_name_order_id ) prev_event_name
+        FROM 
+                  (SELECT t.*
+                          ,CASE   
+                                  WHEN event_name = 'select_item'   THEN 1
+                                  WHEN event_name = 'view_item'     THEN 2
+                                  WHEN event_name = 'add_to_cart'   THEN 3
+                                  WHEN event_name = 'purchase'      THEN 4                                      -- if similar timestamp on two or more events event -> i decide to build order
+                          END as event_name_order_id
+                  FROM unnested_items t
+                  WHERE  (user_pseudo_id,item_name,event_timestamp)
+                                                NOT IN (
+                                                        SELECT (user_pseudo_id,item_name,event_timestamp)
+                                                        FROM one_user_date_timestamp_many_events
+                                                )
+                  -- WHERE user_pseudo_id='84534898.7989426950' and item_name='Google Black Cork Journal'
+                  ) AS subq
+         -- does this change ranking? - no  
+     ) subq2
+ORDER BY user_pseudo_id,item_name,event_timestamp
+) 
  
+
 ,user_event_timestamp_and_items AS ( 
 -- join user events with items important after row_number() above 
 SELECT    
