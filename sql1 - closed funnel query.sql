@@ -233,7 +233,7 @@ FROM funnel_by_items_pivot
 
 -- ,analyse_view_item_select_item AS
 -- (SELECT   event_seq
---         ,COUNT(DISTINCT event_timestamp_dcnt)
+--         ,SUM( event_timestamp_dcnt )
 --         ,CASE
 --                 WHEN STRPOS(event_seq, 'view_item')<STRPOS(event_seq, 'select_item') THEN 'view first'
 --                 WHEN STRPOS(event_seq, 'view_item')>STRPOS(event_seq, 'select_item') THEN 'select first'
