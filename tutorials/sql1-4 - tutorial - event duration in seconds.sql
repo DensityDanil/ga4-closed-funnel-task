@@ -1,7 +1,7 @@
 with prepare_sample AS ( 
 SELECT   subq.*
         ,DATE(event_timestamp) event_timestamp_date
-        ,ROW_NUMBER() OVER( PARTITION BY DATE(event_timestamp),user_pseudo_id,event_name ORDER BY event_timestamp ASC) user_day_event_rn
+        ,ROW_NUMBER() OVER( PARTITION BY DATE(event_timestamp),user_pseudo_id,event_name ORDER BY event_timestamp ASC) user_day_event_rn -- for now i miss many unique events on same timestamp
 FROM 
     (SELECT  
              user_pseudo_id 
@@ -22,7 +22,7 @@ FROM
          subq1.*
         ,DATE_DIFF(  event_timestamp_next 
                    , event_timestamp
-                   , SECOND) AS event_seconds_duration -- experimental calc
+                   , SECOND) AS event_seconds_duration -- experimental calc, review func of timestamp_diff
 FROM 
     (SELECT 
          t.*
@@ -46,7 +46,7 @@ FROM event_duration t
         ,all_events_per_day_avg_duration
         ,AVG(event_seconds_duration) event_seconds_duration_avg
         --,MEDIAN(event_seconds_duration)
-        ,COUNT(DISTINCT user_pseudo_id) user_pseudo_id_dcnt
+        ,COUNT(DISTINCT user_pseudo_id) user_pseudo_id_dcnt  -- how to skip 
 
 FROM    daily_stats
 GROUP BY 1,2,3
