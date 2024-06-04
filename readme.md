@@ -19,7 +19,7 @@
 
 
 ## TODO
-1. Add timezones relevant to country-city (using python libs like pycountry, countryinfo  etc.)
+1. Add timezone intervals for `event_timestamp` relevant to country-city or country-capital (using python libs like pycountry, countryinfo  etc.)
 2. Is it correct to use 'select_item' at first?
 3. Is it okay to calculate user all items?
 4. Is it okay to calculate user items through days?
