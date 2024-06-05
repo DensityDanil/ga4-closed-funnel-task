@@ -25,7 +25,7 @@ SELECT subq2.*
                                                                         ,event_timestamp_date 
 
                                                             ORDER BY     event_timestamp
-                                                                        ,event_name_order_id ) user_pseudo_id_rn 
+                                                                        ,event_name_order_id ) event_seq_id_by_user_day_item
 FROM (
         SELECT subq.*
               ,LAG(event_name) OVER( PARTITION BY user_pseudo_id
